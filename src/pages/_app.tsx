@@ -3,6 +3,11 @@ import type { AppProps } from "next/app";
 import { AnimatePresence, motion } from "framer-motion";
 import DashboardLayout from "@/components/organisms/DashboardLayout";
 import Head from "next/head";
+import { GameProvider } from "@/contexts/gameContext";
+import { UserProvider } from "@/contexts/userContext";
+import Interceptors from "../setup/interceptor";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App({ Component, pageProps, router }: AppProps) {
   return (
@@ -13,39 +18,46 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <DashboardLayout >
-        <AnimatePresence
-          mode="wait"
-          initial={false}
-          onExitComplete={() => window.scrollTo(0, 0)}
-        >
-          <motion.div
-            key={router.route}
-            // initial={{ opacity: 0 }}
-            // animate={{ opacity: 1 }}
-            // exit={{ opacity: 0 }}
-            initial="pageInitial"
-            animate="pageAnimate"
-            exit="pageExit"
-            variants={{
-              pageInitial: {
-                opacity: 0,
-                x: 1000,
-              },
-              pageAnimate: {
-                opacity: 1,
-                x: 0,
-              },
-              // pageExit: {
-              //   y: 300,
-              //   opacity: 0,
-              // },
-            }}
-          >
-            <Component {...pageProps} />
-          </motion.div>
-        </AnimatePresence>
-      </DashboardLayout>
+      <Interceptors>
+        <UserProvider>
+          <GameProvider>
+            <DashboardLayout>
+              <AnimatePresence
+                mode="wait"
+                initial={false}
+                onExitComplete={() => window.scrollTo(0, 0)}
+              >
+                <motion.div
+                  key={router.route}
+                  // initial={{ opacity: 0 }}
+                  // animate={{ opacity: 1 }}
+                  // exit={{ opacity: 0 }}
+                  initial="pageInitial"
+                  animate="pageAnimate"
+                  exit="pageExit"
+                  variants={{
+                    pageInitial: {
+                      opacity: 0,
+                      x: 1000,
+                    },
+                    pageAnimate: {
+                      opacity: 1,
+                      x: 0,
+                    },
+                    // pageExit: {
+                    //   y: 300,
+                    //   opacity: 0,
+                    // },
+                  }}
+                >
+                  <ToastContainer />
+                  <Component {...pageProps} />
+                </motion.div>
+              </AnimatePresence>
+            </DashboardLayout>
+          </GameProvider>
+        </UserProvider>
+      </Interceptors>
     </>
   );
 }
