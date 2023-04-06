@@ -1,47 +1,58 @@
 import TableRow from "@/components/atoms/gameTableRow";
+import Input from "@/components/atoms/input";
+import Shimmer from "@/components/atoms/shimmer";
+import Modal from "@/components/molecules/Modal";
+import { SingleGame } from "@/contexts/gameContext";
+import { SingleUser, UserContext } from "@/contexts/userContext";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import SelectInput from "../../atoms/selectInput";
 
-const tableRows = [
-  {
-    name: "ian miguel",
-    email: "juanmiguel@yopmail,com",
-    address: "Tartu linn, Estonia",
-  },
-  {
-    name: "ian miguel",
-    email: "juanmiguel@yopmail,com",
-    address: "Tartu linn, Estonia",
-  },
-  {
-    name: "ian miguel",
-    email: "juanmiguel@yopmail,com",
-    address: "Tartu linn, Estonia",
-  },
-  {
-    name: "ian miguel",
-    email: "juanmiguel@yopmail,com",
-    address: "Tartu linn, Estonia",
-  },
-  {
-    name: "ian miguel",
-    email: "juanmiguel@yopmail,com",
-    address: "Tartu linn, Estonia",
-  },
-];
+interface Prop {
+  allUser: SingleUser[];
+}
 
-const CustomerSection = () => {
+const CustomerSection = ({ allUser }: Prop) => {
+  const { isLoading, addUsers } = useContext(UserContext);
+
   const [showFilter, setShowFilter] = useState(false);
   const [selectedRange, setSelectedRange] = useState({
     title: "none",
     value: "",
   });
+
   const [selectedemail, setSelectedemail] = useState({
     title: "none",
     value: "",
   });
+  let [isOpen, setIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  const onChange = (e: any) => {
+    setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const [state, setState] = useState({
+    userName: "",
+    email: "",
+    address: "",
+  });
+
+  const submit = () => {
+    addUsers(
+      { name: state.userName, email: state.email, address: state.address },
+      closeModal()
+    );
+  };
+
   return (
     <div>
       <div className="flex justify-between w-full">
@@ -75,7 +86,12 @@ const CustomerSection = () => {
             </button>
           </div>
           <div className="relative ml-4 bg-gradient-to-r from-[#F20493] to-[#9616C3] flex justify-center items-center md:rounded-2xl rounded-lg h-10 md:h-[52px] w-10 md:w-[130px] ">
-            <button className="w-[126px] flex justify-center items-center md:rounded-2xl rounded-lg h-[48px] text-sm font-semibold text-white">
+            <button
+              className="w-[126px] flex justify-center items-center md:rounded-2xl rounded-lg h-[48px] text-sm font-semibold text-white"
+              onClick={() => {
+                openModal();
+              }}
+            >
               <Image
                 height={20}
                 width={20}
@@ -88,6 +104,63 @@ const CustomerSection = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isOpen}
+        buttonText="Add"
+        header="Add New Game"
+        closeModal={closeModal}
+        submit={submit}
+      >
+        <>
+          <Input
+            label="User Name"
+            name="userName"
+            onChange={onChange}
+            placeholder="Enter user name ..."
+            value={state.userName}
+          />
+          <Input
+            label="User Email"
+            name="email"
+            onChange={onChange}
+            placeholder="Enter user email ..."
+            value={state.email}
+          />
+          <Input
+            label="User Address"
+            name="address"
+            onChange={onChange}
+            placeholder="Enter user address ..."
+            value={state.address}
+          />
+          <p className="mb-2">Select Game Category :</p>
+          {/* <div className="h-[52px]">
+            <SelectInput
+              filterOptions={[
+                {
+                  value: "over",
+                  title: "Over",
+                },
+                {
+                  value: "under",
+                  title: "Under",
+                },
+                {
+                  value: "1X",
+                  title: "1x",
+                },
+                {
+                  value: "2X",
+                  title: "2x",
+                },
+              ]}
+              value={userCategory}
+              type="newGame"
+              onChange={setGameCategory}
+            />
+          </div> */}
+        </>
+      </Modal>
 
       {showFilter && (
         <div className="mt-5 flex gap-5">
@@ -176,14 +249,29 @@ const CustomerSection = () => {
                 Action
               </p>
             </div>
-            {tableRows.map((row) => (
-              <TableRow
-                col1={row.name}
-                col2={row.email}
-                col3={row.address}
-                type="customer"
-              />
-            ))}
+            {!isLoading ? (
+              allUser
+                // .filter((item) => {
+                //   return item.category.toLowerCase() ===
+                //     selectedCategory.value.toLowerCase() ||
+                //     selectedCategory.value === ""
+                //     ? true
+                //     : false;
+                // })
+                ?.map((row) => (
+                  <TableRow
+                    col1={row.name}
+                    col2={row.email}
+                    col3={row.address}
+                    type="user"
+                    id={row.id}
+                  />
+                ))
+            ) : (
+              <div className="relative w-full">
+                <Shimmer col={5} />
+              </div>
+            )}
           </div>
         </div>
       </div>

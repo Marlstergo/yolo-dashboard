@@ -8,24 +8,32 @@ import GameSection from "@/components/organisms/gameSection";
 import CustomerSection from "@/components/organisms/customerSection";
 import { GameContext } from "@/contexts/gameContext";
 import { useContext, useEffect, useState } from "react";
+import { UserContext } from "@/contexts/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const { allGames } = useContext(GameContext);
+  const { allUsers } = useContext(UserContext);
   const [gameSliceList, setGameSliceList] = useState(allGames);
+  const [userSliceList, setUserSliceList] = useState(allUsers);
   useEffect(() => {
-    setGameSliceList(allGames.slice(0,6))
-  }, [allGames])
+    setGameSliceList(allGames.slice(0, 6));
+  }, [allGames]);
+  useEffect(() => {
+    setUserSliceList(allUsers.slice(0, 6));
+  }, [allUsers]);
+
   
+
   return (
     <>
       <OverView />
       <div>
-        <GameSection allGames={allGames.slice(0, 6)} />
+        <GameSection allGames={gameSliceList.slice(0, 6)} />
       </div>
       <div className="mt-[44px]">
-        <CustomerSection />
+        <CustomerSection allUser={userSliceList.slice(0, 6)} />
       </div>
     </>
   );

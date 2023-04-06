@@ -247,22 +247,6 @@ const GameSection = ({ allGames }: Prop) => {
 
             {!isLoading ? (
               allGames
-                // .filter((game: any) => {
-                //   console.log(game.category.toLocaleLowerCase()=== selectedCategory.value.toLocaleLowerCase())
-                //   if (selectedCategory.title === "none") {
-                //     console.log("all");
-                //     return true;
-                //   } else if (
-                //     selectedCategory.value.toLocaleLowerCase() === "" &&
-                //     game?.category ===
-                //       selectedCategory.value?.toLocaleLowerCase()
-                //   ) {
-                //     return true;
-                //   } else {
-                //     console.log("nil");
-                //     return false;
-                //   }
-                // })
                 .filter((item) => {
                   return item.category.toLowerCase() ===
                     selectedCategory.value.toLowerCase() ||

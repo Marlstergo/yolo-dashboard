@@ -1,11 +1,14 @@
 import CustomerSection from "@/components/organisms/customerSection";
-import React from "react";
+import { UserContext } from "@/contexts/userContext";
+import React, { useContext } from "react";
 
 const Users = () => {
+  const { allUsers } = useContext(UserContext);
+
   return (
     <div>
       <div>
-        <CustomerSection />
+        <CustomerSection allUser={allUsers.slice(0, 6)} />
       </div>
     </div>
   );
