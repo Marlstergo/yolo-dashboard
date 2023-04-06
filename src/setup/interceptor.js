@@ -30,7 +30,6 @@ const Interceptors = ({ children }) => {
         return response;
       },
       function (error) {
-        console.log("errr", error);
 
         return Promise.reject(error);
       }

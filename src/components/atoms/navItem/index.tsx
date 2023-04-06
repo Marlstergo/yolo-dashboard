@@ -11,7 +11,6 @@ interface NavItem {
 
 const NavItem = ({ name, href, icon }: NavItem) => {
   const router = useRouter();
-  console.log(router.pathname);
 
   return (
     <div

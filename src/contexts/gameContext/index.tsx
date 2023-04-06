@@ -2,16 +2,17 @@ import axios from "axios";
 import { createContext, ReactElement, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-interface EditInterface {
-  name: string;
-  category: string;
-  id: string;
-}
 interface AddInterface {
   name: string;
   category: string;
 }
-interface SingleGame {
+interface EditInterface {
+  name: string;
+  category: string;
+  id: string;
+  cb: Function;
+}
+export interface SingleGame {
   name: string;
   category: string;
   createdAt: Date;
@@ -19,11 +20,12 @@ interface SingleGame {
 }
 
 export const GameContext = createContext({
-  deleteGame: (e: string) => {},
+  deleteGame: (e: string, cb: Function) => {},
   addGames: ({}: AddInterface, callB: Function | void) => {},
   editGames: ({}: EditInterface) => {},
   getAllGames: () => {},
   allGames: [] as SingleGame[],
+  isLoading: false,
 });
 
 interface Props {
@@ -52,36 +54,44 @@ export const GameProvider = ({ children }: Props) => {
         setIsLoading(false);
       });
   };
-  const editGames = ({ name, category, id }: EditInterface) => {
+  const editGames = ({ name, category, id, cb }: EditInterface) => {
     setIsLoading(true);
     toast.promise(
       axios
-        .put(`/game/${id}`)
+        .put(`/game/${id}`, {
+          name,
+          category,
+        })
         .then(() => {
+          cb();
+          getAllGames();
           setIsLoading(false);
         })
         .catch((err) => {
           setIsLoading(false);
         }),
       {
-        pending: "Editing User please wait.. 😵‍💫",
-        success: "User Edited Successfully 💪",
-        error: "Unable to edit user 😢",
+        pending: "Editing Game please wait.. 😵‍💫",
+        success: "Game Edited Successfully 💪",
+        error: "Unable to edit Game 😢",
       }
     );
   };
-  const deleteGame = (id: string) => {
+  const deleteGame = (id: string, cb: Function) => {
     toast.promise(
       axios
         .delete(`/game/${id}`)
-        .then(() => {})
+        .then(() => {
+          getAllGames();
+          cb();
+        })
         .catch((err) => {
           console.log(err);
         }),
       {
-        pending: "Editing User please wait.. 😵‍💫",
-        success: "User deleted Successfully 💪",
-        error: "Unable to edit user 😢",
+        pending: "Editing Game please wait.. 😵‍💫",
+        success: "Game deleted Successfully 💪",
+        error: "Unable to edit Game 🤯",
       }
     );
     return;
@@ -89,7 +99,7 @@ export const GameProvider = ({ children }: Props) => {
   const addGames = ({ name, category }: AddInterface, callB: any) => {
     toast.promise(
       axios
-        .post(`/gamez`, {
+        .post(`/game`, {
           name,
           category,
         })
@@ -100,26 +110,15 @@ export const GameProvider = ({ children }: Props) => {
             callB();
           } else {
             throw new Error("API call failed");
-            
           }
-          // setIsLoading(false);
-          // getAllGames();
-          // callB();
         })
         .catch((err) => {
-          alert('failed')
           setIsLoading(false);
-        })
-      ,
-      // {
-      //   pending: "Editing User please wait.. 😵‍💫",
-      //   success: "User Added Successfully 💪",
-      //   error: "Unable to edit user 🤯",
-      // }
+        }),
       {
-        pending: "Promise is pending",
-        success: "Promise resolved 👌",
-        error: "Promise rejected 🤯",
+        success: "Game Added Successfully 💪",
+        pending: "Editing Game please wait.. 😵‍💫",
+        error: "Unable to edit Game 🤯",
       }
     );
   };
@@ -132,17 +131,8 @@ export const GameProvider = ({ children }: Props) => {
     editGames,
     allGames,
     getAllGames,
+    isLoading,
   };
 
-  return (
-    <GameContext.Provider value={value}>
-      {isLoading === undefined ? (
-        <center>
-          <h3>Loading!!</h3>
-        </center>
-      ) : (
-        children
-      )}
-    </GameContext.Provider>
-  );
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 };

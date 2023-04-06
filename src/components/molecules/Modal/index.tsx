@@ -20,8 +20,6 @@ const Modal = ({
   submit,
   caution,
 }: Props) => {
-
-  console.log(submit, header)
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -64,7 +62,11 @@ const Modal = ({
                   </Dialog.Title>
                   <div className="mt-2">{children}</div>
 
-                  <div className={`mt-4 ${caution && 'flex justify-center'} `}>
+                  <div
+                    className={`mt-4 ${
+                      caution && "flex justify-center gap-4"
+                    } `}
+                  >
                     <button
                       type="button"
                       className={`inline-flex justify-center rounded-md border border-transparent  px-4 py-2 text-sm font-medium ${
@@ -79,6 +81,17 @@ const Modal = ({
                     >
                       {buttonText}
                     </button>
+                    {caution && (
+                      <button
+                        type="button"
+                        className={`inline-flex justify-center rounded-md border border-transparent  px-4 py-2 text-sm font-medium text-blue-900  bg-blue-100 hover:bg-blue-200  focus:outline-none focus-visible:ring-0`}
+                        onClick={() => {
+                          closeModal();
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

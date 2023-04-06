@@ -1,4 +1,4 @@
-import CustomerSection from "@/components/molecules/customerSection";
+import CustomerSection from "@/components/organisms/customerSection";
 import React from "react";
 
 const Users = () => {
