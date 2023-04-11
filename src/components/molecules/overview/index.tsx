@@ -1,12 +1,14 @@
 import OverviewCard from "@/components/atoms/overiewCard";
-import React from "react";
+import { GameContext } from "@/contexts/gameContext";
+import { UserContext } from "@/contexts/userContext";
+import React, { useContext } from "react";
 
 const overviewList = [
   {
     name: "Total Games",
     icon: "/totgame.svg",
     total: "115",
-    percetage: "58.12%",
+    percetage: "34.48%",
     theme: "#EE0BD7",
   },
   {
@@ -14,7 +16,7 @@ const overviewList = [
     theme: "#FC7785",
     icon: "/totpeople.svg",
     total: "115",
-    percetage: "58.12%",
+    percetage: "28.92%",
   },
   {
     name: "Total Revenues",
@@ -26,18 +28,21 @@ const overviewList = [
   {
     name: "Total game categories",
     icon: "/totrevenue.svg",
-    total: "115",
+    total: "6",
   },
   {
-    name: "Total Module",
+    name: "Total Impression",
     icon: "/totmodule.svg",
-    total: "115",
-    percetage: "58.12%",
+    total: "4",
+    percetage: "12.10%",
     theme: "#6A67F3",
   },
 ];
 
 const OverView = () => {
+  const { allGames } = useContext(GameContext);
+  const { allUsers } = useContext(UserContext);
+
   return (
     <div className="mb-6 md:mb-[44px]">
       <div>
@@ -51,7 +56,13 @@ const OverView = () => {
           <OverviewCard
             name={item.name}
             icon={item.icon}
-            total={item.total}
+            total={
+              item.name === "Total Games"
+                ? String(allGames.length)
+                : item.name === "Total Customers"
+                ? String(allUsers.length)
+                : item.total
+            }
             percentage={item.percetage}
             theme={item.theme}
           />
