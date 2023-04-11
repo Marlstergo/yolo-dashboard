@@ -53,5 +53,5 @@ Credits
 --react-toastify (https://fkhadra.github.io/react-toastify/): Used for providing feedback to the user.
 
 License
-
+ 
 This project is not licensed under the MIT License 😅.
