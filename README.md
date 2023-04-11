@@ -5,8 +5,11 @@ This is a dashboard application that displays data from a REST API. It provides 
 Technologies Used
 
 --React
+
 --CSS Modules
+
 --Tailwind CSS
+
 --Axios
 --Moment.js
 --React Bootstrap
