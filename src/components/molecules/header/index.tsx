@@ -58,7 +58,14 @@ const Header = ({ isOpen, setOpen }: Prop) => {
           Joana 👋
         </p>
         <div className="relative w-8 h-8 md:w-10 md:h-10 ml-4 md:ml-[8px]">
-          <Image src={"/avatar.svg"} className="" alt="" fill />
+          <Image
+            src={"/avatar.svg"}
+            className=""
+            alt=""
+            fill
+            priority
+            quality={50}
+          />
         </div>
       </div>
     </div>

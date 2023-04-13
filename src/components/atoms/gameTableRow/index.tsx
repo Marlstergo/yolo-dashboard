@@ -49,9 +49,13 @@ const TableRow = ({ col1, col2, col3, sub3, type, id }: Row) => {
     deleteGame(id, closeModal);
   };
   const submitEdit = () => {
-    editGames({ id: id, cb: closeEditModal, name: state.gameName, category: gameCategory.value });
+    editGames({
+      id: id,
+      cb: closeEditModal,
+      name: state.gameName,
+      category: gameCategory.value,
+    });
   };
-
 
   return (
     <div>
@@ -118,6 +122,8 @@ const TableRow = ({ col1, col2, col3, sub3, type, id }: Row) => {
             src={type === "game" ? "/avv.svg" : "man.svg"}
             className="!h-10 !w-10 md:h-auto md:w-auto"
             alt=""
+            priority
+            quality={0}
           />
           <p className="text-sm font-semibold truncate">{col1}</p>
         </div>

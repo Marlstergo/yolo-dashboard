@@ -73,7 +73,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
                 <div className="flex flex-col w-[140px] min-w-[140px] items-center bg-[#332E59] h-screen overflow-y-auto  left-0 top-0 ">
                   <div className="mt-[60px] mb-[60px]">
                     <Link href="/">
-                      <Image height="48" width={95} alt="" src="/logo.svg" />
+                      <Image priority quality={50} height="48" width={95} alt="" src="/logo.svg" />
                     </Link>
                   </div>
                   {NavList.map((nav) => (
